@@ -4,8 +4,8 @@
     {
         public T ReadById(K id);
         public List<T> ReadAll();
-        public T Create(T entity);
-        public T Update(T entity);
-        public T Delete(T entity);
+        public void Create(T entity, string actionUserId);
+        public void Update(T entity, string actionUserId);
+        public void Delete(T entity, string actionUserId);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ProjectManagementSystem.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ProjectManagementSystem.Models
 {
     public class User : Versioned
     {
@@ -9,6 +11,7 @@
         public UserGroup UserGroup { get; set; }
         public List<Task>? Tasks { get; set; }
 
+        [SetsRequiredMembers]
         public User(string userId, string userEmail, string userPassword, string userFullname, UserGroup userGroup, string originalBatchNo, string currentBatchNo) : base(originalBatchNo, originalBatchNo) { 
             UserId = userId;
             UserEmail = userEmail;
@@ -17,6 +20,7 @@
             UserGroup = userGroup;
         }
 
+        [SetsRequiredMembers]
         public User(string userId, string userEmail, string userPassword, string userFullname, UserGroup userGroup, string originalBatchNo, string currentBatchNo, List<Task> tasks) : base(originalBatchNo, originalBatchNo)
         {
             UserId = userId;

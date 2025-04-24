@@ -19,6 +19,7 @@ CREATE TABLE [Company] (
 
 CREATE TABLE [CompanySequence] (
 	[CompanyId] CHAR(3) NOT NULL PRIMARY KEY,
+	[Batches] INT NOT NULL DEFAULT 0,
 	[Users] INT NOT NULL DEFAULT 0,
 	FOREIGN KEY ([CompanyId]) REFERENCES [Company]([CompanyId])
 );
@@ -33,7 +34,6 @@ CREATE TABLE [Project] (
 CREATE TABLE [ProjectSequence] (
 	[ProjectId] CHAR(5) NOT NULL PRIMARY KEY,
 	[Tasks] INT NOT NULL DEFAULT 0,
-	[Batches] INT NOT NULL DEFAULT 0,
 	FOREIGN KEY ([ProjectId]) REFERENCES [Project]([ProjectId])
 );
 
@@ -45,7 +45,7 @@ CREATE TABLE [UserGroup] (
 );
 
 CREATE TABLE [User] (
-	[UserId] CHAR(10) NOT NULL PRIMARY KEY,
+	[UserId] CHAR(8) NOT NULL PRIMARY KEY,
 	[UserEmail] VARCHAR(100) NOT NULL,
 	[UserPassword] VARCHAR(300) NOT NULL,
 	[UserFullname] VARCHAR(100) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE [User] (
 );
 
 CREATE TABLE [UserShadow] (
-	[UserId] CHAR(10) NOT NULL,
+	[UserId] CHAR(8) NOT NULL,
 	[UserEmail] VARCHAR(100) NOT NULL,
 	[UserPassword] VARCHAR(300) NOT NULL,
 	[UserFullname] VARCHAR(100) NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE [UserShadow] (
 	[CurrentBatchNo] VARCHAR(20) NOT NULL PRIMARY KEY,
 	[Action] VARCHAR(30) NOT NULL,
 	[ActionDateTime] DATETIME NOT NULL,
-	[ActionUserId] CHAR(10) NOT NULL
+	[ActionUserId] CHAR(8) NOT NULL
 );
 
 CREATE TABLE [TaskStatus] (
@@ -101,11 +101,11 @@ CREATE TABLE [TaskShadow] (
 	[CurrentBatchNo] VARCHAR(20) NOT NULL PRIMARY KEY,
 	[Action] VARCHAR(30) NOT NULL,
 	[ActionDateTime] DATETIME NOT NULL,
-	[ActionUserId] CHAR(10) NOT NULL
+	[ActionUserId] CHAR(8) NOT NULL
 );
 
 CREATE TABLE [UserTask] (
-	[UserId] CHAR(10) NOT NULL,
+	[UserId] CHAR(8) NOT NULL,
 	[TaskId] CHAR(10) NOT NULL,
 	PRIMARY KEY([UserId], [TaskId]),
 	FOREIGN KEY([UserId]) REFERENCES [User]([UserId]),

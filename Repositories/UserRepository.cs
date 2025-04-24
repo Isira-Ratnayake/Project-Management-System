@@ -1,32 +1,145 @@
-﻿using ProjectManagementSystem.Models;
+﻿using Microsoft.Data.SqlClient;
+using ProjectManagementSystem.Models;
 
 namespace ProjectManagementSystem.Repositories
 {
     public class UserRepository : IRepository<User, string>
     {
-        public User Create(User entity)
+        private string? _connection;
+        public UserRepository(IConfiguration configuration) {
+            _connection = configuration.GetConnectionString("DefaultConnection");
+        }
+        public void Create(User entity, string actionUserId)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "CreateUser";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserEmail", System.Data.SqlDbType.VarChar).Value = entity.UserEmail;
+                        sqlCommand.Parameters.Add("@UserPassword", System.Data.SqlDbType.VarChar).Value = entity.UserPassword;
+                        sqlCommand.Parameters.Add("@UserFullname", System.Data.SqlDbType.VarChar).Value = entity.UserFullname;
+                        sqlCommand.Parameters.Add("@UserGroupId", System.Data.SqlDbType.VarChar).Value = entity.UserGroup.UserGroupId;
+                        sqlCommand.Parameters.Add("@ActionUserId", System.Data.SqlDbType.VarChar).Value = actionUserId;
+                        sqlConnection.Open();
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("User creation failed. Please try again.");
+                }
+            }
         }
 
-        public User Delete(User entity)
+        public void Delete(User entity, string actionUserId)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "DeleteUser";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserId", System.Data.SqlDbType.VarChar).Value = entity.UserId;
+                        sqlCommand.Parameters.Add("@CurrentBatchNo", System.Data.SqlDbType.VarChar).Value = entity.CurrentBatchNo;
+                        sqlCommand.Parameters.Add("@ActionUserId", System.Data.SqlDbType.VarChar).Value = actionUserId;
+                        sqlConnection.Open();
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("User creation failed. Please try again.");
+                }
+            }
         }
 
         public List<User> ReadAll()
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "ReadAllUsers";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlConnection.Open();
+                        using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                        {
+                            List<User> entities = new List<User>();
+                            while (reader.Read())
+                            {
+                                entities.Add(new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4), reader.GetString(5)), reader.GetString(6), reader.GetString(7)));
+                            }
+                            return entities;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("User creation failed. Please try again.");
+                }
+            }
         }
 
         public User ReadById(string id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "ReadUserById";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserId", System.Data.SqlDbType.VarChar).Value = id;
+                        sqlConnection.Open();
+                        using (SqlDataReader reader = sqlCommand.ExecuteReader()) {
+                            if (reader.Read()) {
+                                return new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4), reader.GetString(5)), reader.GetString(6), reader.GetString(7));
+                            }
+                            throw new Exception("User not found.");
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("User creation failed. Please try again.");
+                }
+            }
         }
 
-        public User Update(User entity)
+        public void Update(User entity, string actionUserId)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "UpdateUser";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserEmail", System.Data.SqlDbType.VarChar).Value = entity.UserEmail;
+                        sqlCommand.Parameters.Add("@UserFullname", System.Data.SqlDbType.VarChar).Value = entity.UserFullname;
+                        sqlCommand.Parameters.Add("@UserGroupId", System.Data.SqlDbType.VarChar).Value = entity.UserGroup.UserGroupId;
+                        sqlCommand.Parameters.Add("@UserId", System.Data.SqlDbType.VarChar).Value = entity.UserId;
+                        sqlCommand.Parameters.Add("@CurrentBatchNo", System.Data.SqlDbType.VarChar).Value = entity.CurrentBatchNo;
+                        sqlCommand.Parameters.Add("@ActionUserId", System.Data.SqlDbType.VarChar).Value = actionUserId;
+                        sqlConnection.Open();
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("User creation failed. Please try again.");
+                }
+            }
         }
     }
 }
