@@ -1,4 +1,6 @@
-﻿namespace ProjectManagementSystem.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ProjectManagementSystem.Models
 {
     public class Task : Versioned
     {
@@ -9,8 +11,9 @@
         public required DateTime EndDate { get; set; }
         public required TaskStatus TaskStatus { get; set; }
         public required Project Project { get; set; }
-        public List<User>? Users { get; set; } 
+        public List<User>? Users { get; set; }
 
+        [SetsRequiredMembers]
         public Task(string taskId, string taskTite, string taskDescription, DateTime startDate, DateTime endDate, TaskStatus taskStatus, Project project, string originalBatchNo, string currentBatchNo) : base(originalBatchNo, currentBatchNo) { 
             TaskId = taskId;
             TaskTitle = taskTite;
@@ -20,6 +23,7 @@
             TaskStatus = taskStatus;
             Project = project;
         }
+        [SetsRequiredMembers]
         public Task(string taskId, string taskTite, string taskDescription, DateTime startDate, DateTime endDate, TaskStatus taskStatus, Project project, string originalBatchNo, string currentBatchNo, List<User> users) : base(originalBatchNo, currentBatchNo)
         {
             TaskId = taskId;

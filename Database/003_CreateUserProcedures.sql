@@ -157,3 +157,12 @@ AS
 BEGIN
 	SELECT * FROM [UsersView] WHERE [UserId] = @UserId;
 END;
+
+GO
+
+CREATE OR ALTER PROCEDURE ReadUserByEmail
+	@UserEmail VARCHAR(100)
+AS
+BEGIN
+	SELECT * FROM [UsersView] WHERE [UserEmail] = @UserEmail;
+END;

@@ -115,6 +115,35 @@ namespace ProjectManagementSystem.Repositories
             }
         }
 
+        public User ReadByEmail(string email)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "ReadUserByEmail";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserEmail", System.Data.SqlDbType.VarChar).Value = email;
+                        sqlConnection.Open();
+                        using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4), reader.GetString(5)), reader.GetString(6), reader.GetString(7));
+                            }
+                            throw new Exception("User not found.");
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("User creation failed. Please try again.");
+                }
+            }
+        }
+
         public void Update(User entity, string actionUserId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
