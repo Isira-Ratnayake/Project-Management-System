@@ -12,7 +12,7 @@ namespace ProjectManagementSystem.Models
         public List<Task>? Tasks { get; set; }
 
         [SetsRequiredMembers]
-        public User(string userId, string userEmail, string userPassword, string userFullname, UserGroup userGroup, string originalBatchNo, string currentBatchNo) : base(originalBatchNo, originalBatchNo) { 
+        public User(string userId, string userEmail, string userPassword, string userFullname, UserGroup userGroup, string originalBatchNo, string currentBatchNo) : base(originalBatchNo, currentBatchNo) { 
             UserId = userId;
             UserEmail = userEmail;
             UserPassword = userPassword;
@@ -21,7 +21,7 @@ namespace ProjectManagementSystem.Models
         }
 
         [SetsRequiredMembers]
-        public User(string userId, string userEmail, string userPassword, string userFullname, UserGroup userGroup, string originalBatchNo, string currentBatchNo, List<Task> tasks) : base(originalBatchNo, originalBatchNo)
+        public User(string userId, string userEmail, string userPassword, string userFullname, UserGroup userGroup, string originalBatchNo, string currentBatchNo, List<Task> tasks) : base(originalBatchNo, currentBatchNo)
         {
             UserId = userId;
             UserEmail = userEmail;

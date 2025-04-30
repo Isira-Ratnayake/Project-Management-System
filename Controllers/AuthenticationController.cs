@@ -17,10 +17,10 @@ namespace ProjectManagementSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] UserLogin userLogin) {
+        public IActionResult Login([FromBody] UserLoginDto userLoginDto) {
             try
             {
-                User user = _authenticationService.Authentiate(userLogin);
+                User user = _authenticationService.Authentiate(userLoginDto);
                 string jwtToken = _authenticationService.GenerateJwtToken(user);
                 UserDto userDto = new UserDto()
                 {

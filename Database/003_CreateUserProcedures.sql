@@ -100,7 +100,7 @@ BEGIN
 			END TRY
 			BEGIN CATCH
 				ROLLBACK;
-				THROW 50003, 'User updating failed. Please try again.', 1; 
+				THROW 50003, 'User updating failed. Please try again.', 1;
 			END CATCH;
 		END;
 END;
@@ -165,4 +165,13 @@ CREATE OR ALTER PROCEDURE ReadUserByEmail
 AS
 BEGIN
 	SELECT * FROM [UsersView] WHERE [UserEmail] = @UserEmail;
+END;
+
+GO
+
+CREATE OR ALTER PROCEDURE ReadUserShadowByCurrentBatchNo
+	@CurrentBatchNo VARCHAR(20)
+AS
+BEGIN
+	SELECT * FROM [UserShadow] WHERE [CurrentBatchNo] = @CurrentBatchNo;
 END;

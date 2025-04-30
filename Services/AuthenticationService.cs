@@ -19,12 +19,12 @@ namespace ProjectManagementSystem.Services
             _userRepository = userRepository;
         }
 
-        public User Authentiate(UserLogin userLogin)
+        public User Authentiate(UserLoginDto userLoginDto)
         {
             try
             {
-                User user = _userRepository.ReadByEmail(userLogin.Email);
-                if (BCrypt.Net.BCrypt.EnhancedVerify(userLogin.Password, user.UserPassword))
+                User user = _userRepository.ReadByEmail(userLoginDto.Email ?? string.Empty);
+                if (BCrypt.Net.BCrypt.EnhancedVerify(userLoginDto.Password, user.UserPassword))
                 {
                     return user;
                 }
@@ -44,7 +44,8 @@ namespace ProjectManagementSystem.Services
         {
             Claim[] claims = new Claim[] {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, user.UserGroup.UserGroupId)
             };
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Convert.FromHexString(SecurityConstants.PrivateKey));
             SigningCredentials signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);

@@ -1,0 +1,5 @@
+CREATE OR ALTER PROCEDURE ReadAllUserGroups
+AS
+BEGIN
+	SELECT * FROM [UserGroup];
+END;

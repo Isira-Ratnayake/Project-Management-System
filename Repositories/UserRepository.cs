@@ -54,7 +54,7 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User creation failed. Please try again.");
+                    throw new Exception("User deleting failed. Please try again.");
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User creation failed. Please try again.");
+                    throw new Exception("Failed to fetch data. Please try again.");
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User creation failed. Please try again.");
+                    throw new Exception("Failed to fetch data. Please try again.");
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User creation failed. Please try again.");
+                    throw new Exception("Failed to fetch data. Please try again.");
                 }
             }
         }
@@ -166,7 +166,36 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User creation failed. Please try again.");
+                    throw new Exception("User updating failed. Please try again.");
+                }
+            }
+        }
+
+        public Audit<User> ReadAuditByCurrentBatchNo(string currentBatchNo)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "ReadUserShadowByCurrentBatchNo";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@CurrentBatchNo", System.Data.SqlDbType.VarChar).Value = currentBatchNo;
+                        sqlConnection.Open();
+                        using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new Audit<User>(reader.GetString(7), reader.GetDateTime(8), reader.GetString(9), new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4)), reader.GetString(5), reader.GetString(6)));
+                            }
+                            throw new Exception("Audit not found.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Failed to fetch data. Please try again.");
                 }
             }
         }
