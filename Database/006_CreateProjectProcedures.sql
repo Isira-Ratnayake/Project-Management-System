@@ -2,12 +2,12 @@ CREATE OR ALTER FUNCTION GenerateNextProjectId
 (
 	@CompanyId CHAR(3)
 )
-RETURNS CHAR(5)
+RETURNS CHAR(8)
 BEGIN
 	DECLARE @Projects INT;
-	DECLARE @NextProjectId CHAR(5);
+	DECLARE @NextProjectId CHAR(8);
 	SELECT @Projects = ([Projects]+1) FROM [CompanySequence] WHERE [CompanyId] = @CompanyId;
-	SET @NextProjectId = CONCAT_WS('-', @CompanyId, CAST(@Projects AS VARCHAR));
+	SET @NextProjectId = CONCAT_WS('-', @CompanyId, RIGHT(REPLICATE('0', 4) + CAST(@Projects AS VARCHAR), 4));
 	RETURN @NextProjectId;
 END;
 
@@ -18,7 +18,7 @@ CREATE OR ALTER PROCEDURE CreateProject
 	@ActionUserId CHAR(8)
 AS
 BEGIN
-	DECLARE @NextProjectId CHAR(5);
+	DECLARE @NextProjectId CHAR(8);
 	DECLARE @NextBatchNo VARCHAR(20);
 
 	BEGIN
@@ -44,7 +44,7 @@ GO
 
 CREATE OR ALTER PROCEDURE UpdateProject
 	@ProjectName VARCHAR(100),
-	@ProjectId CHAR(5),
+	@ProjectId CHAR(8),
 	@CurrentBatchNo VARCHAR(20),
 	@ActionUserId CHAR(8)
 AS
@@ -79,7 +79,7 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE DeleteProject
-	@ProjectId CHAR(5),
+	@ProjectId CHAR(8),
 	@CurrentBatchNo VARCHAR(20),
 	@ActionUserId CHAR(8)
 AS
@@ -123,7 +123,7 @@ BEGIN
 					DECLARE @TaskDescription VARCHAR(MAX);
 					DECLARE @StartDate DATE;
 					DECLARE @EndDate DATE;
-					DECLARE @TaskStatusId CHAR(5);
+					DECLARE @TaskStatusId CHAR(8);
 					DECLARE @TaskOriginalBatchNo VARCHAR(20);
 					DECLARE TaskCursor CURSOR LOCAL FOR SELECT [TaskId], [TaskTitle], [TaskDescription], [StartDate], [EndDate], [TaskStatusId], [OriginalBatchNo] FROM [Task] WHERE [ProjectId] = @ProjectId;
 					OPEN TaskCursor;
@@ -174,7 +174,7 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE ReadProjectById
-	@ProjectId CHAR(5)
+	@ProjectId CHAR(8)
 AS
 BEGIN
 	SELECT * FROM [Project] WHERE [ProjectId] = @ProjectId;

@@ -28,7 +28,7 @@ CREATE TABLE [CompanySequence] (
 );
 
 CREATE TABLE [Project] (
-	[ProjectId] CHAR(5) NOT NULL PRIMARY KEY,
+	[ProjectId] CHAR(8) NOT NULL PRIMARY KEY,
 	[ProjectName] VARCHAR(100) NOT NULL,
 	[CompanyId] CHAR(3) NOT NULL,
 	[OriginalBatchNo] VARCHAR(20) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE [Project] (
 );
 
 CREATE TABLE [ProjectShadow] (
-	[ProjectId] CHAR(5) NOT NULL,
+	[ProjectId] CHAR(8) NOT NULL,
 	[ProjectName] VARCHAR(100) NOT NULL,
 	[CompanyId] CHAR(3) NOT NULL,
 	[OriginalBatchNo] VARCHAR(20) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE [ProjectShadow] (
 );
 
 CREATE TABLE [ProjectSequence] (
-	[ProjectId] CHAR(5) NOT NULL PRIMARY KEY,
+	[ProjectId] CHAR(8) NOT NULL PRIMARY KEY,
 	[Tasks] INT NOT NULL DEFAULT 0,
 	FOREIGN KEY ([ProjectId]) REFERENCES [Project]([ProjectId])
 );
@@ -98,7 +98,7 @@ CREATE TABLE [Task] (
 	[StartDate] DATE NOT NULL,
 	[EndDate] DATE NOT NULL,
 	[TaskStatusId] CHAR(5) NOT NULL,
-	[ProjectId] CHAR(5) NOT NULL,
+	[ProjectId] CHAR(8) NOT NULL,
 	[OriginalBatchNo] VARCHAR(20) NOT NULL,
 	[CurrentBatchNo] VARCHAR(20) NOT NULL,
 	FOREIGN KEY ([TaskStatusId]) REFERENCES [TaskStatus]([TaskStatusId]),
@@ -112,7 +112,7 @@ CREATE TABLE [TaskShadow] (
 	[StartDate] DATE NOT NULL,
 	[EndDate] DATE NOT NULL,
 	[TaskStatusId] CHAR(5) NOT NULL,
-	[ProjectId] CHAR(5) NOT NULL,
+	[ProjectId] CHAR(8) NOT NULL,
 	[OriginalBatchNo] VARCHAR(20) NOT NULL,
 	[CurrentBatchNo] VARCHAR(20) NOT NULL PRIMARY KEY,
 	[Action] VARCHAR(30) NOT NULL,
