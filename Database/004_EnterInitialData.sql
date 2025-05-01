@@ -2,7 +2,7 @@ USE [pmsdb];
 
 INSERT INTO [Company] VALUES ('CCL', 'Courtaulds Clothing Lanka');
 
-INSERT INTO [CompanySequence] VALUES ('CCL', 1, 1);
+INSERT INTO [CompanySequence] VALUES ('CCL', 1, 1, 0);
 
 INSERT INTO [UserGroup] VALUES ('CCL-1', 'Administrator', 'CCL'), ('CCL-2', 'Worker', 'CCL');
 
