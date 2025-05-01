@@ -1,18 +1,21 @@
-﻿namespace ProjectManagementSystem.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ProjectManagementSystem.Models
 {
-    public class Project
+    public class Project : Versioned
     {
         public required string ProjectId { get; set; }
         public required string ProjectName { get; set; }
         public List<Task>? Tasks { get; set; }
 
-        public Project(string projectId, string projectName) { 
+        [SetsRequiredMembers]
+        public Project(string projectId, string projectName, string originalBatchNo, string currentBatchNo) : base(originalBatchNo, currentBatchNo) { 
             ProjectId = projectId;
             ProjectName = projectName;
         }
 
-        public Project(string projectId, string projectName, List<Task> tasks)
-        {
+        [SetsRequiredMembers]
+        public Project(string projectId, string projectName, List<Task> tasks, string originalBatchNo, string currentBatchNo) : base(originalBatchNo, currentBatchNo) { 
             ProjectId = projectId;
             ProjectName = projectName;
             Tasks = tasks;

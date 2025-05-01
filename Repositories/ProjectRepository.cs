@@ -3,26 +3,25 @@ using ProjectManagementSystem.Models;
 
 namespace ProjectManagementSystem.Repositories
 {
-    public class UserRepository : IRepository<User, string>
+    public class ProjectRepository : IRepository<Project, string>
     {
         private string? _connection;
-        public UserRepository(IConfiguration configuration) {
+        public ProjectRepository(IConfiguration configuration)
+        {
             _connection = configuration.GetConnectionString("DefaultConnection");
         }
-        public void Create(User entity, string actionUserId)
+
+        public void Create(Project entity, string actionUserId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
             {
                 try
                 {
-                    string procedure = "CreateUser";
+                    string procedure = "CreateProject";
                     using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
                     {
                         sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        sqlCommand.Parameters.Add("@UserEmail", System.Data.SqlDbType.VarChar).Value = entity.UserEmail;
-                        sqlCommand.Parameters.Add("@UserPassword", System.Data.SqlDbType.VarChar).Value = entity.UserPassword;
-                        sqlCommand.Parameters.Add("@UserFullname", System.Data.SqlDbType.VarChar).Value = entity.UserFullname;
-                        sqlCommand.Parameters.Add("@UserGroupId", System.Data.SqlDbType.VarChar).Value = entity.UserGroup.UserGroupId;
+                        sqlCommand.Parameters.Add("@ProjectName", System.Data.SqlDbType.VarChar).Value = entity.ProjectName;
                         sqlCommand.Parameters.Add("@ActionUserId", System.Data.SqlDbType.VarChar).Value = actionUserId;
                         sqlConnection.Open();
                         sqlCommand.ExecuteNonQuery();
@@ -30,22 +29,22 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User creation failed. Please try again.");
+                    throw new Exception("Project creation failed. Please try again.");
                 }
             }
         }
 
-        public void Delete(User entity, string actionUserId)
+        public void Delete(Project entity, string actionUserId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
             {
                 try
                 {
-                    string procedure = "DeleteUser";
+                    string procedure = "DeleteProject";
                     using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
                     {
                         sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        sqlCommand.Parameters.Add("@UserId", System.Data.SqlDbType.VarChar).Value = entity.UserId;
+                        sqlCommand.Parameters.Add("@ProjectId", System.Data.SqlDbType.VarChar).Value = entity.ProjectId;
                         sqlCommand.Parameters.Add("@CurrentBatchNo", System.Data.SqlDbType.VarChar).Value = entity.CurrentBatchNo;
                         sqlCommand.Parameters.Add("@ActionUserId", System.Data.SqlDbType.VarChar).Value = actionUserId;
                         sqlConnection.Open();
@@ -54,28 +53,28 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User deleting failed. Please try again.");
+                    throw new Exception("Project deleting failed. Please try again.");
                 }
             }
         }
 
-        public List<User> ReadAll()
+        public List<Project> ReadAll()
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
             {
                 try
                 {
-                    string procedure = "ReadAllUsers";
+                    string procedure = "ReadAllProjects";
                     using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
                     {
                         sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                         sqlConnection.Open();
                         using (SqlDataReader reader = sqlCommand.ExecuteReader())
                         {
-                            List<User> entities = new List<User>();
+                            List<Project> entities = new List<Project>();
                             while (reader.Read())
                             {
-                                entities.Add(new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4), reader.GetString(5)), reader.GetString(6), reader.GetString(7)));
+                                entities.Add(new Project(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
                             }
                             return entities;
                         }
@@ -88,52 +87,25 @@ namespace ProjectManagementSystem.Repositories
             }
         }
 
-        public User ReadById(string id)
+        public Project ReadById(string id)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
             {
                 try
                 {
-                    string procedure = "ReadUserById";
+                    string procedure = "ReadProjectById";
                     using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
                     {
                         sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        sqlCommand.Parameters.Add("@UserId", System.Data.SqlDbType.VarChar).Value = id;
-                        sqlConnection.Open();
-                        using (SqlDataReader reader = sqlCommand.ExecuteReader()) {
-                            if (reader.Read()) {
-                                return new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4), reader.GetString(5)), reader.GetString(6), reader.GetString(7));
-                            }
-                            throw new Exception("User not found.");
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Failed to fetch data. Please try again.");
-                }
-            }
-        }
-
-        public User ReadByEmail(string email)
-        {
-            using (SqlConnection sqlConnection = new SqlConnection(_connection))
-            {
-                try
-                {
-                    string procedure = "ReadUserByEmail";
-                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
-                    {
-                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        sqlCommand.Parameters.Add("@UserEmail", System.Data.SqlDbType.VarChar).Value = email;
+                        sqlCommand.Parameters.Add("@ProjectId", System.Data.SqlDbType.VarChar).Value = id;
                         sqlConnection.Open();
                         using (SqlDataReader reader = sqlCommand.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                return new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4), reader.GetString(5)), reader.GetString(6), reader.GetString(7));
+                                return new Project(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
                             }
-                            throw new Exception("User not found.");
+                            throw new Exception("Project not found.");
                         }
                     }
                 }
@@ -144,20 +116,18 @@ namespace ProjectManagementSystem.Repositories
             }
         }
 
-        public void Update(User entity, string actionUserId)
+        public void Update(Project entity, string actionUserId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
             {
                 try
                 {
-                    string procedure = "UpdateUser";
+                    string procedure = "UpdateProject";
                     using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
                     {
                         sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        sqlCommand.Parameters.Add("@UserEmail", System.Data.SqlDbType.VarChar).Value = entity.UserEmail;
-                        sqlCommand.Parameters.Add("@UserFullname", System.Data.SqlDbType.VarChar).Value = entity.UserFullname;
-                        sqlCommand.Parameters.Add("@UserGroupId", System.Data.SqlDbType.VarChar).Value = entity.UserGroup.UserGroupId;
-                        sqlCommand.Parameters.Add("@UserId", System.Data.SqlDbType.VarChar).Value = entity.UserId;
+                        sqlCommand.Parameters.Add("@ProjectName", System.Data.SqlDbType.VarChar).Value = entity.ProjectName;
+                        sqlCommand.Parameters.Add("@ProjectId", System.Data.SqlDbType.VarChar).Value = entity.ProjectId;
                         sqlCommand.Parameters.Add("@CurrentBatchNo", System.Data.SqlDbType.VarChar).Value = entity.CurrentBatchNo;
                         sqlCommand.Parameters.Add("@ActionUserId", System.Data.SqlDbType.VarChar).Value = actionUserId;
                         sqlConnection.Open();
@@ -166,18 +136,18 @@ namespace ProjectManagementSystem.Repositories
                 }
                 catch (Exception)
                 {
-                    throw new Exception("User updating failed. Please try again.");
+                    throw new Exception("Project updating failed. Please try again.");
                 }
             }
         }
 
-        public Audit<User> ReadAuditByCurrentBatchNo(string currentBatchNo)
+        public Audit<Project> ReadAuditByCurrentBatchNo(string currentBatchNo)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connection))
             {
                 try
                 {
-                    string procedure = "ReadUserShadowByCurrentBatchNo";
+                    string procedure = "ReadProjectShadowByCurrentBatchNo";
                     using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
                     {
                         sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
@@ -187,7 +157,7 @@ namespace ProjectManagementSystem.Repositories
                         {
                             if (reader.Read())
                             {
-                                return new Audit<User>(reader.GetString(7), reader.GetDateTime(8), reader.GetString(9), new User(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), new UserGroup(reader.GetString(4)), reader.GetString(5), reader.GetString(6)));
+                                return new Audit<Project>(reader.GetString(5), reader.GetDateTime(6), reader.GetString(7), new Project(reader.GetString(0), reader.GetString(1), reader.GetString(3), reader.GetString(4)));
                             }
                             throw new Exception("Audit not found.");
                         }

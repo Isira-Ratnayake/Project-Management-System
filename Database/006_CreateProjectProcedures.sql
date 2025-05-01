@@ -180,3 +180,11 @@ BEGIN
 	SELECT * FROM [Project] WHERE [ProjectId] = @ProjectId;
 END;
 
+GO
+
+CREATE OR ALTER PROCEDURE ReadProjectShadowByCurrentBatchNo
+	@CurrentBatchNo VARCHAR(20)
+AS
+BEGIN
+	SELECT * FROM [ProjectShadow] WHERE [CurrentBatchNo] = @CurrentBatchNo;
+END;
