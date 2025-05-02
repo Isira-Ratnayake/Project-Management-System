@@ -92,7 +92,7 @@ CREATE TABLE [TaskStatus] (
 );
 
 CREATE TABLE [Task] (
-	[TaskId] CHAR(10) NOT NULL PRIMARY KEY,
+	[TaskId] CHAR(13) NOT NULL PRIMARY KEY,
 	[TaskTitle] VARCHAR(50) NOT NULL,
 	[TaskDescription] VARCHAR(MAX) NOT NULL,
 	[StartDate] DATE NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE [Task] (
 );
 
 CREATE TABLE [TaskShadow] (
-	[TaskId] CHAR(10) NOT NULL,
+	[TaskId] CHAR(13) NOT NULL,
 	[TaskTitle] VARCHAR(50) NOT NULL,
 	[TaskDescription] VARCHAR(MAX) NOT NULL,
 	[StartDate] DATE NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE [TaskShadow] (
 
 CREATE TABLE [UserTask] (
 	[UserId] CHAR(8) NOT NULL,
-	[TaskId] CHAR(10) NOT NULL,
+	[TaskId] CHAR(13) NOT NULL,
 	[OriginalBatchNo] VARCHAR(20) NOT NULL,
 	[CurrentBatchNo] VARCHAR(20) NOT NULL,
 	PRIMARY KEY([UserId], [TaskId]),
@@ -132,7 +132,7 @@ CREATE TABLE [UserTask] (
 
 CREATE TABLE [UserTaskShadow] (
 	[UserId] CHAR(8) NOT NULL,
-	[TaskId] CHAR(10) NOT NULL,
+	[TaskId] CHAR(13) NOT NULL,
 	[OriginalBatchNo] VARCHAR(20) NOT NULL,
 	[CurrentBatchNo] VARCHAR(20) NOT NULL PRIMARY KEY,
 	[Action] VARCHAR(30) NOT NULL,

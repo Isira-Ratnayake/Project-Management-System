@@ -35,7 +35,7 @@ BEGIN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK;
-			THROW 50001, 'Project creation failed. Please try again.', 1; 
+			THROW 50005, 'Project creation failed. Please try again.', 1; 
 		END CATCH;
 	END;
 END;
@@ -71,7 +71,7 @@ BEGIN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK;
-			THROW 50001, 'Project updating failed. Please try again.', 1; 
+			THROW 50006, 'Project updating failed. Please try again.', 1; 
 		END CATCH;
 	END;
 END;
@@ -99,7 +99,7 @@ BEGIN
 					THROW 50000, 'Record version conflict.', 3;
 
 				BEGIN
-					DECLARE @TaskId_1 CHAR(10);
+					DECLARE @TaskId_1 CHAR(13);
 					DECLARE @UserId CHAR(8);
 					DECLARE @UserTaskOriginalBatchNo VARCHAR(20);
 					DECLARE UserTaskCursor CURSOR LOCAL FOR SELECT [UserTask].[TaskId], [UserTask].[UserId], [UserTask].[OriginalBatchNo] FROM [Task] INNER JOIN [UserTask] ON [Task].[TaskId] = [UserTask].[TaskId] WHERE [ProjectId] = @ProjectId;
@@ -118,7 +118,7 @@ BEGIN
 				END;
 
 				BEGIN
-					DECLARE @TaskId_2 CHAR(10);
+					DECLARE @TaskId_2 CHAR(13);
 					DECLARE @TaskTitle VARCHAR(50);
 					DECLARE @TaskDescription VARCHAR(MAX);
 					DECLARE @StartDate DATE;
@@ -158,7 +158,7 @@ BEGIN
 					DEALLOCATE TaskCursor;
 				END;
 			ROLLBACK;
-			THROW 50001, 'Project deleting failed. Please try again.', 1; 
+			THROW 50007, 'Project deleting failed. Please try again.', 1; 
 		END CATCH;
 	END;
 END;

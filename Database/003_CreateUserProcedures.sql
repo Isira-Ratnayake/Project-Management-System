@@ -136,7 +136,7 @@ BEGIN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK;
-			THROW 50003, 'User deleting failed. Please try again.', 1; 
+			THROW 50004, 'User deleting failed. Please try again.', 1; 
 		END CATCH;
 	END;
 END;
