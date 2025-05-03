@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagementSystem.DataTransferObjects;
 using ProjectManagementSystem.Services;
@@ -7,23 +8,23 @@ namespace ProjectManagementSystem.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class ProjectsController : ControllerBase
     {
-        private readonly UsersService _usersService;
-
-        public UsersController(UsersService usersService) {
-            _usersService = usersService;
+        private readonly ProjectsService _projectsService;
+        public ProjectsController(ProjectsService projectsService)
+        {
+            _projectsService = projectsService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "CCL-1")]
-        public IActionResult ListUsers() {
+        [Authorize]
+        public IActionResult ListProjects() {
             try
             {
-                ListUsersDto listUsersDto = _usersService.ListUsers();
-                return Ok(listUsersDto);
+                ListProjectsDto listProjectsDto = _projectsService.ListProjects();
+                return Ok(listProjectsDto);
             }
-            catch (Exception ex) {
+            catch (Exception ex) { 
                 string message = ex.Message;
                 return Unauthorized(new { message });
             }
@@ -31,11 +32,11 @@ namespace ProjectManagementSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "CCL-1")]
-        public IActionResult CreateUser([FromBody] UserDto userDto)
+        public IActionResult CreateProject([FromBody] ProjectDto projectDto)
         {
             try
             {
-                string message = _usersService.CreateUser(userDto);
+                string message = _projectsService.CreateProject(projectDto);
                 return Ok(new { message });
             }
             catch (Exception ex)
@@ -47,11 +48,11 @@ namespace ProjectManagementSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "CCL-1")]
-        public IActionResult UpdateUser([FromBody] UserDto userDto)
+        public IActionResult UpdateProject([FromBody] ProjectDto projectDto)
         {
             try
             {
-                string message = _usersService.UpdateUser(userDto);
+                string message = _projectsService.UpdateProject(projectDto);
                 return Ok(new { message });
             }
             catch (Exception ex)
@@ -63,11 +64,11 @@ namespace ProjectManagementSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "CCL-1")]
-        public IActionResult DeleteUser([FromBody] UserDto userDto)
+        public IActionResult DeleteProject([FromBody] ProjectDto projectDto)
         {
             try
             {
-                string message = _usersService.DeleteUser(userDto);
+                string message = _projectsService.DeleteProject(projectDto);
                 return Ok(new { message });
             }
             catch (Exception ex)

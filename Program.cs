@@ -35,7 +35,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<UserGroupRepository>();
+builder.Services.AddScoped<ProjectRepository>();
+builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<ProjectsService>();
 
 builder.Services.AddControllers();
 

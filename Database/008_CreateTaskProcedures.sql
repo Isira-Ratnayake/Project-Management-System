@@ -244,3 +244,14 @@ AS
 BEGIN
 	SELECT * FROM [UserTasksView] WHERE [TaskId] = @TaskId;
 END;
+
+GO
+
+CREATE OR ALTER PROCEDURE ReadTasksByProjectId
+	@ProjectId CHAR(8)
+AS
+BEGIN
+	SELECT * FROM [TasksView] WHERE [ProjectId] = @ProjectId;
+END;
+
+GO
