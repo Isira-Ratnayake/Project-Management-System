@@ -220,6 +220,35 @@ namespace ProjectManagementSystem.Repositories
             }
         }
 
+        public List<TaskStatus> ReadAllTaskStatuses()
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connection))
+            {
+                try
+                {
+                    string procedure = "ReadAllTasks";
+                    using (SqlCommand sqlCommand = new SqlCommand(procedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlConnection.Open();
+                        using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                        {
+                            List<TaskStatus> entities = new List<TaskStatus>();
+                            while (reader.Read())
+                            {
+                                entities.Add(new TaskStatus(reader.GetString(0), reader.GetString(1)));
+                            }
+                            return entities;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Failed to fetch data. Please try again.");
+                }
+            }
+        }
+
         // Returns ids in subject array but not in reference array
         private List<string> FilterMissingUserIds(List<User> subject, List<User> reference) {
             List<string> ids = new List<string>();

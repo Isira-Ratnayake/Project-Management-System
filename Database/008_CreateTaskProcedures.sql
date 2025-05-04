@@ -255,3 +255,11 @@ BEGIN
 END;
 
 GO
+
+CREATE OR ALTER PROCEDURE ReadAllTaskStatuses
+AS
+BEGIN
+	SELECT * FROM [TaskStatus];
+END;
+
+GO

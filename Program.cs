@@ -39,6 +39,7 @@ builder.Services.AddScoped<ProjectRepository>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<ProjectsService>();
+builder.Services.AddScoped<TasksService>();
 
 builder.Services.AddControllers();
 
